@@ -1,0 +1,34 @@
+services:
+  mysql:
+    image: mysql:8.0.20
+    container_name: django-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: django
+      MYSQL_DATABASE: django-local_db
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      TZ: 'Asia/Tokyo'
+    command: >
+      mysqld --default-authentication-plugin=mysql_native_password
+
+    volumes:
+    - ./data/data:/var/lib/mysql
+
+    ports:
+    - 3307:3306
+
+  web:
+    build: .
+    container_name: django
+    environment:
+      TZ: 'Asia/Tokyo'
+    command: python3 manage.py runserver 0.0.0.0:8001
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mysql
+
+volumes:
+  data:
