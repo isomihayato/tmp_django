@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:8.0.20
+    restart: always
     container_name: django-mysql
     environment:
       MYSQL_ROOT_PASSWORD: django
@@ -10,12 +11,10 @@ services:
       TZ: 'Asia/Tokyo'
     command: >
       mysqld --default-authentication-plugin=mysql_native_password
-
     volumes:
     - ./data/data:/var/lib/mysql
-
     ports:
-    - 3307:3306
+    - 3306:3306
 
   web:
     build: .
